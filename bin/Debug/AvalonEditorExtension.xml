@@ -1,0 +1,155 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+AvalonEditorExtension
+</name>
+</assembly>
+<members>
+<member name="T:AvalonEditorExtension.My.MyWpfExtension">
+ <summary>
+ Modul zum Definieren der im My-Namespace für WPF verfügbaren Eigenschaften
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:AvalonEditorExtension.My.MyWpfExtension.Application">
+ <summary>
+ Gibt das Anwendungsobjekt für die ausgeführte Anwendung zurück.
+ </summary>
+</member>
+<member name="P:AvalonEditorExtension.My.MyWpfExtension.Computer">
+ <summary>
+ Gibt Informationen über den Hostcomputer zurück.
+ </summary>
+</member>
+<member name="P:AvalonEditorExtension.My.MyWpfExtension.User">
+ <summary>
+ Gibt Informationen über den aktuellen Benutzer zurück.  Wenn Sie die Anwendung mit den aktuellen Windows-
+ Anmeldeinformationen ausführen möchten, rufen Sie My.User.InitializeWithWindowsUser() auf.
+ </summary>
+</member>
+<member name="P:AvalonEditorExtension.My.MyWpfExtension.Log">
+ <summary>
+ Gibt das Anwendungsprotokoll zurück. Die Listener können in der Konfigurationsdatei der Anwendung konfiguriert werden.
+ </summary>
+</member>
+<member name="P:AvalonEditorExtension.My.MyWpfExtension.Windows">
+ <summary>
+ Gibt die im Projekt definierte Windows-Auflistung zurück.
+ </summary>
+</member>
+<member name="T:AvalonEditorExtension.My.Resources.Resources">
+<summary>
+  Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+</summary>
+</member>
+<member name="P:AvalonEditorExtension.My.Resources.Resources.ResourceManager">
+<summary>
+  Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+</summary>
+</member>
+<member name="P:AvalonEditorExtension.My.Resources.Resources.Culture">
+<summary>
+  Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+  Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+</summary>
+</member>
+<member name="P:AvalonEditorExtension.My.Resources.Resources.CSS_SyntaxDefinition">
+<summary>
+  Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;SyntaxDefinition name=&quot;css&quot; extensions=&quot;.css&quot; xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
+  &lt;Color name=&quot;Comment&quot; foreground=&quot;Gray&quot; exampleText=&quot;/* comment */&quot; /&gt;
+  &lt;Color name=&quot;String&quot; foreground=&quot;Green&quot; exampleText=&quot;body { background: url(&amp;quot;image.png&amp;quot;) }&quot; /&gt;
+  &lt;Color name=&quot;Selector&quot; foreground=&quot;DarkBlue&quot; fontWeight=&quot;bold&quot; exampleText=&quot;div p&quot; /&gt;
+  &lt;Color name=&quot;Class&quot; foreground=&quot;DarkMagenta&quot; exampleText=&quot;#para&quot; /&gt;
+  &lt;Color name= [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+</summary>
+</member>
+<member name="P:AvalonEditorExtension.My.Resources.Resources.Eml_SyntaxDefinition">
+<summary>
+  Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;SyntaxDefinition name=&quot;eml&quot; extensions=&quot;.eml&quot; xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
+
+  &lt;Color name=&quot;Part&quot; foreground=&quot;Orange&quot; exampleText=&quot;------=_Part_1838148_611968503.1400846645777&quot;/&gt;
+  &lt;Color name=&quot;Punctuation&quot; foreground=&quot;#f00&quot; exampleText=&quot;charset=utf8;&quot;/&gt;
+  &lt;Color name=&quot;String&quot; foreground=&quot;#993&quot; exampleText=&apos;&quot;Hello World!&quot;&apos;/&gt;
+  &lt;Color name=&quot;Attribut&quot; foreground=&quot;#00f&quot; fontWeight=&quot;bold&quot; exampleText=&quot;Subject: Hello World!&quot;/&gt;
+  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+</summary>
+</member>
+<member name="P:AvalonEditorExtension.My.Resources.Resources.SQL_SyntaxDefinition">
+<summary>
+  Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;SyntaxDefinition name=&quot;sql&quot; extensions=&quot;.sql&quot; xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
+  &lt;Color name=&quot;String&quot; foreground=&quot;DarkRed&quot; exampleText=&quot;string text = &amp;quot;Hello, World!&amp;quot;&quot;/&gt;
+  &lt;Color name=&quot;String2&quot; foreground=&quot;#993&quot; exampleText=&quot;string text = &amp;quot;Hello, World!&amp;quot;&quot;/&gt;
+  &lt;Color name=&quot;Comment&quot; foreground=&quot;Green&quot; exampleText=&quot;string text = &amp;quot;Hello, World!&amp;quot;&quot;/&gt;
+  &lt;Color name=&quot;Punctuation&quot; foreground=&quot;Olive&quot; exampleTe [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+</summary>
+</member>
+<member name="T:AvalonEditorExtension.AvalonEditor">
+<summary>
+AvalonEditor
+</summary>
+</member>
+<member name="M:AvalonEditorExtension.AvalonEditor.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+<member name="M:AvalonEditorExtension.SyntaxError.#ctor(System.Int32,System.Int32)">
+ <summary>
+ Erstellt ein Text Segment
+ </summary>
+ <param name="SegmentStart">Start des Segments</param>
+ <param name="SegmentLength">Länge des Segments</param>
+</member>
+<member name="M:AvalonEditorExtension.SyntaxError.#ctor(System.Int32,System.Int32,System.Int32)">
+ <summary>
+ Erstellt ein Text Segment
+ </summary>
+ <param name="SegmentStart">Start des Segments</param>
+ <param name="SegmentLength">Länge des Segments</param>
+ <param name="Line">Zeile des Segments</param>
+</member>
+<member name="M:AvalonEditorExtension.SyntaxError.#ctor(System.Int32,System.Int32,System.Int32,System.String)">
+ <summary>
+ Erstellt ein Text Segment
+ </summary>
+ <param name="SegmentStart">Start des Segments</param>
+ <param name="SegmentLength">Länge des Segments</param>
+ <param name="Line">Zeile des Segments</param>
+ <param name="Message">Fehler Text</param>
+</member>
+<member name="T:AvalonEditorExtension.SearchWin">
+<summary>
+SearchWin
+</summary>
+</member>
+<member name="M:AvalonEditorExtension.SearchWin.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+<member name="T:AvalonEditorExtension.ucErrorTooltip">
+<summary>
+ucErrorTooltip
+</summary>
+</member>
+<member name="M:AvalonEditorExtension.ucErrorTooltip.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+<member name="T:AvalonEditorExtension.ucErrorView">
+<summary>
+ucErrorView
+</summary>
+</member>
+<member name="M:AvalonEditorExtension.ucErrorView.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+</members>
+</doc>

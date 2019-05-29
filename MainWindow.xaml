@@ -1,0 +1,131 @@
+﻿<Window
+    xmlns:ava="clr-namespace:AvalonEditorExtension;assembly=AvalonEditorExtension"
+    xmlns:local="clr-namespace:WpfApplication1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:awe="http://schemas.awesomium.com/winfx" x:Class="MainWindow" x:Name="Win"
+    Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <Brush>Pink</Brush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border BorderBrush="Green" BorderThickness="2" CornerRadius="5" Background="{TemplateBinding Background}">
+                            <Grid>
+                                <ContentControl VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Content="{TemplateBinding Content}" />
+                                <Rectangle x:Name="HR" Fill="#7FFFFFFF" Opacity="0" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="HR" Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.LayoutTransform>
+            <ScaleTransform x:Name="WinScale" ScaleX="1" ScaleY="1" />
+        </Grid.LayoutTransform>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Margin="20 20 10 20" Background="#EEE">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="Col1" Width="1*"/>
+                <ColumnDefinition x:Name="Col2" Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter Width="4" Background="red" />
+            <Button Content="Button" Margin="0 0 -25 0" HorizontalAlignment="Right" Click="Button_Click" Background="Red"/>
+        </Grid>
+
+        <Grid Margin="20 20 10 20" Background="#EEE" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Width, ElementName=Col1}"/>
+                <ColumnDefinition Width="{Binding Width, ElementName=Col2}"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Fill="CornflowerBlue" Grid.Column="1"/>
+            <Button Content="Test"/>
+        </Grid>
+
+        <Ellipse RenderTransformOrigin="0.5 0.5" Width="50" Height="50" Stroke="Green" StrokeThickness="5" StrokeDashCap="Round" StrokeDashArray="20 5" Margin="50,50,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Ellipse.RenderTransform>
+                <RotateTransform Angle="0" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360" Duration="0:0:1" AutoReverse="False" RepeatBehavior="Forever"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+
+
+
+        <ItemsControl x:Name="ic" DataContext="{Binding Personal, ElementName=Win}" ItemsSource="{Binding}" Grid.Column="1" Grid.RowSpan="2" Margin="10 20 20 20" Background="#eee">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="local:Person">
+                    <Grid>
+                        <Border BorderBrush="{x:Null}" >
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFF0F0F0" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <ContentControl Content="{Binding Name}" HorizontalAlignment="Left" />
+                        <ContentControl Content="{Binding Alter}" HorizontalAlignment="Right" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+
+        <!--<ava:AvalonEditor Grid.RowSpan="2" Grid.ColumnSpan="2" CodeLanguage="Xml" />-->
+
+
+        <RichTextBox Grid.Row="2" Grid.ColumnSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="Hallo Titel" FontSize="18" FontStyle="Italic" FontWeight="Bold" />
+                    <LineBreak />
+                    <Hyperlink Cursor="Hand" Foreground="#FF0046FF" NavigateUri="google.de" Click="Hyperlink_Click">Text</Hyperlink>
+                    <LineBreak />
+                    <Run Text="Orbit Logistics ist ein international führender Anbieter von Bestandsmanagement-Lösungen (VMI - Vendor Managed Inventory und SCM - Supply Chain Management) und globaler Echtzeit-Prozessdatenerfassung. Das Unternehmen, gegründet im Jahr 2003, liefert ein modular aufgebautes System für elektronisches Prozessdatenmanagement und betreibt ein weltweites Netzwerk mit eigenen Rechenzentren. Ein hoch qualifiziertes Team aus über 40 Ingenieuren und Technikern bietet maßgeschneiderte Komplettlösungen für Prozessüberwachung und -management."/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
+
+    </Grid>
+</Window>
