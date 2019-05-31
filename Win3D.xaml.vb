@@ -2,6 +2,7 @@
 
 Public Class Win3D
 
+    Private camController As OrbitingCameraController
 
     Public Sub New()
         ' Dieser Aufruf ist für den Designer erforderlich.
@@ -9,7 +10,199 @@ Public Class Win3D
 
         ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
         viewport3D1.Children.Add(New CubePillar(New Point3D(0, 0, 0), 1.5))
+
+        camController = New OrbitingCameraController(viewport3D1, camMain)
     End Sub
+
+End Class
+
+Public Class OrbitingCameraController
+
+    Private ViewParent As Panel
+    Private View As Viewport3D
+    Private Cam As ProjectionCamera
+    Private rotaHelper As New RotationHelper
+
+    Public Property ZoomStep As Double = 0.2D
+    Public Property MoveStep As Double = 0.1D
+
+    Private IsRotatingCam As Boolean = False
+    Private IsMovingCam As Boolean = False
+    Private MousePos As New Point
+
+    Public Sub New(view As Viewport3D)
+        'Set View ==========================================
+        Me.View = view
+
+        'Make Cam ==========================================
+        Me.Cam = New PerspectiveCamera With {.Position = New Point3D(0, 5, 5), .LookDirection = New Vector3D(0, -5, -5)}
+        Me.View.Camera = Me.Cam
+
+        'Init ==========================================
+        Init()
+    End Sub
+
+    Public Sub New(view As Viewport3D, cam As ProjectionCamera)
+        'Set View ==========================================
+        Me.View = view
+
+        'Set Cam ==========================================
+        Me.Cam = cam
+
+        'Init ==========================================
+        Init()
+    End Sub
+
+    Private Sub Init()
+        If TypeOf View.Parent Is Panel Then
+            ViewParent = View.Parent
+        End If
+
+        AddHandler ViewParent.MouseDown, AddressOf ViewPort_MouseDown
+        AddHandler ViewParent.MouseUp, AddressOf ViewPort_MouseUp
+        AddHandler ViewParent.MouseMove, AddressOf ViewPort_MouseMove
+        AddHandler ViewParent.MouseWheel, AddressOf ViewPortMouseWheel
+
+        AddHandler ViewParent.PreviewMouseDown, AddressOf ViewPort_MouseDown
+        AddHandler ViewParent.PreviewMouseUp, AddressOf ViewPort_MouseUp
+        AddHandler ViewParent.PreviewMouseMove, AddressOf ViewPort_MouseMove
+        AddHandler ViewParent.PreviewMouseWheel, AddressOf ViewPortMouseWheel
+
+        Dim r As RotationHelper.Result = rotaHelper.getPos
+        Cam.Position = r.position
+        Cam.LookDirection = r.viewAngle
+    End Sub
+
+    Private Sub ViewPort_MouseDown(sender As Object, e As MouseEventArgs)
+        Dim curMp As Point = e.GetPosition(View)
+        MousePos = New Point(curMp.X, curMp.Y)
+
+        If e.LeftButton = MouseButtonState.Pressed Then
+            IsRotatingCam = True
+            ViewParent.CaptureMouse()
+
+        ElseIf e.RightButton = MouseButtonState.Pressed Then
+            IsMovingCam = True
+            ViewParent.CaptureMouse()
+
+        ElseIf e.MiddleButton = MouseButtonState.Pressed Then
+        End If
+    End Sub
+
+    Private Sub ViewPort_MouseUp(sender As Object, e As MouseEventArgs)
+        IsRotatingCam = False
+        IsMovingCam = False
+        ViewParent.ReleaseMouseCapture()
+    End Sub
+
+    Private Sub ViewPort_MouseMove(sender As Object, e As MouseEventArgs)
+        If IsRotatingCam Or IsMovingCam Then
+            Dim curMp As Point = e.GetPosition(View)
+            Dim xD As Double = curMp.X - MousePos.X
+            Dim yD As Double = curMp.Y - MousePos.Y
+
+            If IsRotatingCam Then
+                rotaHelper.H_Angle -= (xD / 8)
+                rotaHelper.V_Angle -= (yD / 8)
+                Dim r As RotationHelper.Result = rotaHelper.getPos
+                Cam.Position = r.position
+                Cam.LookDirection = r.viewAngle
+
+            ElseIf IsMovingCam Then
+                Dim OffStep As Point
+                OffStep = RotationHelper.DegreesToXY(rotaHelper.H_Angle - 90, xD / 30, New Point(rotaHelper.OffsetX, rotaHelper.OffsetZ))
+                OffStep = RotationHelper.DegreesToXY(rotaHelper.H_Angle + 180, yD / 30, OffStep)
+                rotaHelper.OffsetX = OffStep.X
+                rotaHelper.OffsetZ = OffStep.Y
+                Dim r As RotationHelper.Result = rotaHelper.getPos
+                Cam.Position = r.position
+                Cam.LookDirection = r.viewAngle
+            End If
+
+            MousePos = New Point(curMp.X, curMp.Y)
+        End If
+    End Sub
+
+    Private Sub ViewPortMouseWheel(sender As Object, e As MouseWheelEventArgs)
+        If e.Delta > 0 Then
+            rotaHelper.Distance += ZoomStep
+            Dim r As RotationHelper.Result = rotaHelper.getPos
+            Cam.Position = r.position
+            Cam.LookDirection = r.viewAngle
+        ElseIf e.Delta < 0 Then
+            rotaHelper.Distance -= ZoomStep
+            Dim r As RotationHelper.Result = rotaHelper.getPos
+            Cam.Position = r.position
+            Cam.LookDirection = r.viewAngle
+        End If
+    End Sub
+
+    Private Class RotationHelper
+        Public Structure Result
+            Public position As Point3D
+            Public viewAngle As Vector3D
+        End Structure
+
+        Private _V_Angle As Double = -45
+        Public Property V_Angle As Double
+            Get
+                Return _V_Angle
+            End Get
+            Set(value As Double)
+                If value > 0 Then value = 0
+                If value < -90 Then value = -90
+                _V_Angle = value
+            End Set
+        End Property
+
+        Private _H_Angle As Double = 45
+        Public Property H_Angle As Double
+            Get
+                Return _H_Angle
+            End Get
+            Set(value As Double)
+                value = value Mod 360
+                If value < 0 Then value += 360
+                _H_Angle = value
+            End Set
+        End Property
+
+        Public Property Distance As Double = 10
+
+        Public Property OffsetX As Double = 0
+        Public Property OffsetY As Double = 0
+        Public Property OffsetZ As Double = 0
+
+        Public Function getPos() As Result
+
+            Dim XY As Point = DegreesToXY(V_Angle, Distance, New Point(0, 0))
+            Dim XZ As Point = DegreesToXY(H_Angle, XY.X, New Point(0, 0))
+
+            Dim r As New Result() With {
+                .position = New Point3D(XZ.X + OffsetX, XY.Y + OffsetY, XZ.Y + OffsetZ),
+                .viewAngle = New Vector3D(-XZ.X, -XY.Y, -XZ.Y)
+            }
+
+            Return r
+        End Function
+
+        Public Shared Function DegreesToXY(ByVal degrees As Single, ByVal radius As Single, ByVal origin As Point) As Point
+            Dim xy As Point = New Point()
+            Dim radians As Double = degrees * Math.PI / 180.0
+            xy.X = CSng(Math.Cos(radians)) * radius + origin.X
+            xy.Y = CSng(Math.Sin(-radians)) * radius + origin.Y
+            Return xy
+        End Function
+
+        Public Shared Function XYToDegrees(ByVal xy As Point, ByVal origin As Point) As Single
+            Dim deltaX As Integer = origin.X - xy.X
+            Dim deltaY As Integer = origin.Y - xy.Y
+            Dim radAngle As Double = Math.Atan2(deltaY, deltaX)
+            Dim degreeAngle As Double = radAngle * 180.0 / Math.PI
+            Return CSng((180.0 - degreeAngle))
+        End Function
+
+    End Class
 
 End Class
 
